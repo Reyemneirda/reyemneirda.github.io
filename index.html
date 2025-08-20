@@ -67,7 +67,30 @@
       }
     </style>
 
-    <!-- Icons -->
+    <style>
+      html[dir="rtl"] .animate-float {
+        transform-origin: center;
+      }
+      html[dir="rtl"] .flex {
+        flex-direction: row-reverse;
+      }
+    </style>
+    <style>
+      /* Card Preview Styles */
+      .preview-container {
+        position: fixed;
+        top: 50%;
+        right: 2rem;
+        transform: translateY(-50%);
+        width: 320px;
+        max-height: 400px;
+        z-index: 50;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+    </style>
     <script defer src="https://unpkg.com/lucide@latest"></script>
   </head>
 
@@ -120,6 +143,10 @@
           skillsCloudList2: "GitLab CI, GitHub Actions, SharePoint",
           viewGithub: "View GitHub",
           skillsOther: "Design Systems, Project Management",
+          inviteTitle: "Your Project?",
+          inviteDesc:
+            "Have an exciting project in mind? Let's discuss how I can help bring your vision to life with modern, scalable solutions.",
+          contactMe: "Contact Me",
           open: "Open",
         },
         fr: {
@@ -166,7 +193,60 @@
           skillsCloudList2: "GitLab CI, GitHub Actions, SharePoint",
           viewGithub: "Voir GitHub",
           skillsOther: "Design Systems, Gestion de Projet",
+          inviteTitle: "Votre Projet ?",
+          inviteDesc:
+            "Vous avez un projet passionnant en tête ? Discutons ensemble de la façon dont je peux vous aider à donner vie à votre vision avec des solutions modernes et évolutives.",
+          contactMe: "Me Contacter",
           open: "Ouvrir",
+        },
+        he: {
+          metaTitle: "אדריאן מאייר — מפתח Full-Stack בכיר",
+          metaDesc:
+            "תיק עבודות של אדריאן מאייר — מפתח Full-Stack בכיר. פרויקטים אחרונים, כישורים ויצירת קשר.",
+          name: "אדריאן מאייר",
+          navProjects: "פרויקטים",
+          navSkills: "כישורים",
+          navCV: "קורות חיים",
+          badge: "זמין למשרות ופרויקטים",
+          heroTitle1: "מפתח ",
+          heroTitle2: "Full-Stack בכיר",
+          heroSubtitle:
+            "אני עוזר לצוותים לעצב ולפתח אפליקציות אינטרנט מהירות וניתנות להרחבה (Next.js, NestJS, TypeScript, Ruby on Rails, CI/CD).",
+          ctaProjects: "ראה את העבודות שלי",
+          ctaContact: "צור קשר",
+          statYears: "שנות ניסיון",
+          statStacks: "טכנולוגיות שפיתחתי",
+          statCloud: "ענן ו-DevOps",
+          stackHeader: "סטאק טכנולוגי",
+          stackSub: "React · TypeScript · Node.js",
+          card1Title: "Au Bureau — דמו",
+          card1Desc:
+            "דף נחיתה מודרני (Next.js) לרשת מסעדות עם אנימציות ופוקוס על ביצועים.",
+          card2Title: "בית מרקחת אזורי",
+          card2Desc:
+            "אתר עסקי מותאם SEO מקומי עם יצירת קשר מאובטחת ו-SSR מהיר.",
+          card3Title: "עצומת עוצר לילה",
+          card3Desc: "אתר לעצומה המחובר לטופס Google.",
+          addMore: "הוסף עוד כרטיסים על ידי שכפול 🎯",
+          projectsTitle: "פרויקטים אחרונים",
+          projectsSubtitle: "מבחר עבודות בייצור ודמו.",
+          skillsTitle: "כישורים מרכזיים",
+          skillsFront: "Front-end",
+          skillsFrontList1: "React, Next.js, TypeScript, Tailwind, UI/UX",
+          skillsFrontList2: "ביצועים, SEO, נגישות",
+          skillsBack: "Back-end ונתונים",
+          skillsBackList1: "Ruby on Rails, NestJS, Node.js, C#",
+          skillsBackList2: "PostgreSQL, MySQL, MongoDB, Prisma",
+          skillsCloud: "ענן ו-DevOps",
+          skillsCloudList1: "AWS, Azure, Firebase",
+          skillsCloudList2: "GitLab CI, GitHub Actions, SharePoint",
+          skillsOther: "מערכות עיצוב, ניהול פרויקטים",
+          viewGithub: "ראה ב-GitHub",
+          inviteTitle: "הפרויקט שלכם?",
+          inviteDesc:
+            "יש לכם פרויקט מרתק? בואו נדבר על איך אני יכול לעזור לכם להגשים את החזון שלכם לחיים עם פתרונות מודרניים ומתקדמים.",
+          contactMe: "צרו קשר",
+          open: "פתח",
         },
       };
 
@@ -188,6 +268,16 @@
         const dict = i18n[lang] || i18n.en;
         localStorage.setItem("lang", lang);
         document.documentElement.setAttribute("lang", lang);
+
+        // Handle RTL for Hebrew
+        if (lang === "he") {
+          document.documentElement.setAttribute("dir", "rtl");
+          document.documentElement.classList.add("rtl");
+        } else {
+          document.documentElement.setAttribute("dir", "ltr");
+          document.documentElement.classList.remove("rtl");
+        }
+
         document.title = dict.metaTitle;
         const meta = document.querySelector('meta[name="description"]');
         if (meta) meta.setAttribute("content", dict.metaDesc);
@@ -209,7 +299,11 @@
       document.addEventListener("DOMContentLoaded", () => {
         const savedLang =
           localStorage.getItem("lang") ||
-          (navigator.language?.startsWith("fr") ? "fr" : "en");
+          (navigator.language?.startsWith("fr")
+            ? "fr"
+            : navigator.language?.startsWith("he")
+            ? "he"
+            : "en");
         const sel = document.getElementById("lang-select");
         if (sel) sel.value = savedLang;
         setLang(savedLang);
@@ -265,6 +359,7 @@
           >
             <option value="en">EN</option>
             <option value="fr">FR</option>
+            <option value="he">עב</option>
           </select>
 
           <button
@@ -431,6 +526,8 @@
           <!-- Card 1 -->
           <article
             class="group relative overflow-hidden rounded-2xl ring-1 ring-slate-200/60 dark:ring-white/10 bg-white/80 dark:bg-slate-900/60 glass hover:shadow-xl transition"
+            data-preview-card="aubureau"
+            data-preview-url="https://aubureau-demo.vercel.app/"
           >
             <div class="p-5">
               <h3 class="font-semibold text-lg" data-i18n="card1Title">
@@ -476,6 +573,8 @@
           <!-- Card 2 -->
           <article
             class="group relative overflow-hidden rounded-2xl ring-1 ring-slate-200/60 dark:ring-white/10 bg-white/80 dark:bg-slate-900/60 glass hover:shadow-xl transition"
+            data-preview-card="pharmacie"
+            data-preview-url="https://www.pharmacieregionale.fr/"
           >
             <div class="p-5">
               <h3 class="font-semibold text-lg" data-i18n="card2Title">
@@ -516,6 +615,8 @@
 
           <article
             class="group relative overflow-hidden rounded-2xl ring-1 ring-slate-200/60 dark:ring-white/10 bg-white/80 dark:bg-slate-900/60 glass hover:shadow-xl transition"
+            data-preview-card="petition"
+            data-preview-url="https://petition-couvre-feu.fr/"
           >
             <div class="p-5">
               <h3 class="font-semibold text-lg" data-i18n="card3Title">
@@ -557,17 +658,43 @@
             </div>
           </article>
 
+          <!-- Invitation Card -->
           <article
-            class="hidden relative overflow-hidden rounded-2xl ring-1 ring-dashed ring-slate-300/80 dark:ring-white/20 bg-white/50 dark:bg-slate-900/30 grid place-items-center p-6"
+            class="group relative overflow-hidden rounded-2xl ring-1 ring-dashed ring-brand-300/50 dark:ring-brand-500/30 bg-gradient-to-br from-brand-50/80 to-white/80 dark:from-brand-900/20 dark:to-slate-900/60 glass hover:shadow-xl transition-all duration-300 hover:ring-brand-500/60 hover:scale-105"
+            data-preview-card="invite"
           >
-            <div class="text-center">
-              <i data-lucide="plus" class="w-8 h-8 mx-auto opacity-70"></i>
-              <p
-                class="mt-2 text-sm text-slate-600 dark:text-slate-300"
-                data-i18n="addMore"
+            <div class="p-5">
+              <div
+                class="mb-3 inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400"
               >
-                Add more cards by duplicating one 🎯
+                <i data-lucide="rocket" class="w-6 h-6"></i>
+              </div>
+              <h3
+                class="font-semibold text-lg text-brand-900 dark:text-brand-100"
+                data-i18n="inviteTitle"
+              >
+                Your Project?
+              </h3>
+              <p
+                class="mt-1 text-sm text-slate-600 dark:text-slate-300"
+                data-i18n="inviteDesc"
+              >
+                Have an exciting project in mind? Let's discuss how I can help
+                bring your vision to life with modern, scalable solutions.
               </p>
+              <div class="mt-5 flex items-center gap-3">
+                <a
+                  href="mailto:adrien.t.meyer@gmail.com?subject=New Project Inquiry"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 text-white hover:bg-brand-700 shadow-glow transition transform hover:scale-105"
+                  ><i data-lucide="mail" class="w-4 h-4"></i>
+                  <span data-i18n="contactMe">Contact Me</span></a
+                >
+              </div>
+            </div>
+            <div
+              class="absolute top-2 right-2 opacity-30 group-hover:opacity-60 transition-opacity"
+            >
+              <i data-lucide="sparkles" class="w-5 h-5 text-brand-600"></i>
             </div>
           </article>
         </div>
@@ -632,7 +759,10 @@
               <li data-i18n="skillsCloudList2">
                 GitLab CI, GitHub Actions, SharePoint
               </li>
-              <li data-i18n="skillsOther" class="text-slate-500 dark:text-slate-400 text-xs">
+              <li
+                data-i18n="skillsOther"
+                class="text-slate-500 dark:text-slate-400 text-xs"
+              >
                 Design Systems, Project Management
               </li>
             </ul>
