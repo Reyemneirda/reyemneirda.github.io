@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
+    <link rel="canonical" href="https://adrienmeyer.com/" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Adrien Meyer — Senior Full‑Stack Developer</title>
@@ -79,16 +80,21 @@
       /* Card Preview Styles */
       .preview-container {
         position: fixed;
-        top: 50%;
-        right: 2rem;
-        transform: translateY(-50%);
-        width: 320px;
-        max-height: 400px;
+        top: 15%;
+        transform: translateY(-60%);
+        transform: translateX(35%);
+        width: 60%;
+        max-height: 600px;
         z-index: 50;
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
         pointer-events: none;
+      }
+
+      .preview-container.show {
+        opacity: 1;
+        visibility: visible;
       }
     </style>
     <script defer src="https://unpkg.com/lucide@latest"></script>
@@ -493,7 +499,32 @@
         </div>
       </div>
     </section>
-
+    <!-- Preview Container -->
+    <div id="preview-container" class="preview-container">
+      <div
+        class="rounded-2xl overflow-hidden bg-white/90 dark:bg-slate-900/90 glass ring-1 ring-slate-200/60 dark:ring-white/10 shadow-2xl"
+      >
+        <div
+          class="p-3 border-b border-slate-200/60 dark:border-white/10 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+          </div>
+          <div class="text-xs text-slate-500 dark:text-slate-400">
+            Live Preview
+          </div>
+        </div>
+        <div class="h-80">
+          <iframe
+            id="preview-iframe"
+            class="w-full h-full"
+            frameborder="0"
+          ></iframe>
+        </div>
+      </div>
+    </div>
     <!-- Projects -->
     <section id="projects" class="py-16 sm:py-24">
       <div class="mx-auto max-w-6xl px-4">
@@ -775,6 +806,40 @@
       document.addEventListener("DOMContentLoaded", () => {
         if (window.lucide && window.lucide.createIcons)
           window.lucide.createIcons();
+
+        // Initialize card preview functionality
+        const previewContainer = document.getElementById("preview-container");
+        const previewIframe = document.getElementById("preview-iframe");
+        const cards = document.querySelectorAll("[data-preview-card]");
+        let previewTimeout;
+
+        cards.forEach((card) => {
+          const previewUrl = card.getAttribute("data-preview-url");
+
+          if (previewUrl) {
+            card.addEventListener("mouseenter", () => {
+              clearTimeout(previewTimeout);
+              previewTimeout = setTimeout(() => {
+                if (previewIframe && previewContainer) {
+                  previewIframe.src = previewUrl;
+                  previewContainer.classList.add("show");
+                }
+              }, 500);
+            });
+
+            card.addEventListener("mouseleave", () => {
+              clearTimeout(previewTimeout);
+              previewTimeout = setTimeout(() => {
+                if (previewContainer) {
+                  previewContainer.classList.remove("show");
+                  setTimeout(() => {
+                    if (previewIframe) previewIframe.src = "";
+                  }, 300);
+                }
+              }, 200);
+            });
+          }
+        });
       });
     </script>
   </body>
