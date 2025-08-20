@@ -80,11 +80,10 @@
       /* Card Preview Styles */
       .preview-container {
         position: fixed;
-        top: 15%;
-        transform: translateY(-60%);
-        transform: translateX(35%);
-        width: 60%;
-        max-height: 600px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(90vw, 500px);
+        max-height: 400px;
         z-index: 50;
         opacity: 0;
         visibility: hidden;
@@ -95,6 +94,15 @@
       .preview-container.show {
         opacity: 1;
         visibility: visible;
+      }
+
+      @media (min-width: 1024px) {
+        .preview-container {
+          left: auto;
+          right: 2rem;
+          transform: none;
+          width: 350px;
+        }
       }
     </style>
     <script defer src="https://unpkg.com/lucide@latest"></script>
@@ -558,7 +566,6 @@
           <article
             class="group relative overflow-hidden rounded-2xl ring-1 ring-slate-200/60 dark:ring-white/10 bg-white/80 dark:bg-slate-900/60 glass hover:shadow-xl transition"
             data-preview-card="aubureau"
-            data-preview-url="https://aubureau-demo.vercel.app/"
           >
             <div class="p-5">
               <h3 class="font-semibold text-lg" data-i18n="card1Title">
@@ -821,6 +828,17 @@
               clearTimeout(previewTimeout);
               previewTimeout = setTimeout(() => {
                 if (previewIframe && previewContainer) {
+                  // Position preview relative to card on mobile/tablet
+                  const cardRect = card.getBoundingClientRect();
+                  if (window.innerWidth < 1024) {
+                    const topPos = Math.max(cardRect.top - 50, 20);
+                    previewContainer.style.top = topPos + "px";
+                  } else {
+                    // Desktop: center vertically
+                    previewContainer.style.top = "50%";
+                    previewContainer.style.transform = "translateY(-50%)";
+                  }
+
                   previewIframe.src = previewUrl;
                   previewContainer.classList.add("show");
                 }
